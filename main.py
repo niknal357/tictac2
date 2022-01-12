@@ -58,8 +58,8 @@ if engine == None:
 
 if len(bots) == 1:
     print('You seem to have no bots installed.')
-    inp = input('would you like to install the default set of bots? (y/n) ')
-    if inp.lower()[0] == 'y':
+    #inp = input('would you like to install the default set of bots? (y/n) ')
+    if True:
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/avajaris.py', '-o', 'mods/avajaris.py'], shell=True)
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/bot_3.py', '-o', 'mods/bot_3.py'], shell=True)
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/bot_7.py', '-o', 'mods/bot_7.py'], shell=True)
