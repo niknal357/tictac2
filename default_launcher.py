@@ -3,7 +3,18 @@
 import time
 import math
 import random
-import pygame
+import os
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--trusted-host", "pypi.org",
+                          "--trusted-host", "pypi.python.org", "--trusted-host", "files.pythonhosted.org", package])
+try:
+    import pygame
+except:
+    install('pygame')
+    import pygame
 #from perlin_noise import PerlinNoise
 import colorsys
 

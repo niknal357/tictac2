@@ -1,5 +1,16 @@
 #mod_type: engine
-import pygame, time
+import sys
+import subprocess
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--trusted-host", "pypi.org",
+                          "--trusted-host", "pypi.python.org", "--trusted-host", "files.pythonhosted.org", package])
+import time
+
+try:
+    import pygame
+except:
+    install('pygame')
+    import pygame
 
 def lerp(a, b, p):
     return a+b*p-a*p
