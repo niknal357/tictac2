@@ -30,7 +30,7 @@ def lerp(a, b, p):
 
 button_selections = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0}
 
-ld_mode = 'light'
+ld_mode = 'dark'
 
 BUTTON_ENLARGEMENT = 10
 
