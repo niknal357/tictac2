@@ -56,13 +56,14 @@ if engine == None:
     engine = module_from_file(
         'default_engine.py', 'mods/default_engine.py').engine
 
-if len(bots) == 1:
+if True:
     print('You seem to have no bots installed.')
     #inp = input('would you like to install the default set of bots? (y/n) ')
     if True:
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/avajaris.py', '-o', 'mods/avajaris.py'], shell=True)
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/bot_3.py', '-o', 'mods/bot_3.py'], shell=True)
         subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/bot_7.py', '-o', 'mods/bot_7.py'], shell=True)
+        subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/bot_8.py', '-o', 'mods/bot_8.py'], shell=True)
         for mod in os.listdir('mods'):
             if mod.split('.')[-1] != 'py':
                 continue
