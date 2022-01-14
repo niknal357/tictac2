@@ -71,7 +71,6 @@ def bot(grid, playing_as):
                 maxposs = [(x, y)]
             elif fork_valgrid[x][y] == maxval:
                 maxposs.append((x, y))
-    print(maxval, maxposs)
     yield random.choice(maxposs)
 
 def find_forks(grid, calculating_for):
