@@ -205,12 +205,12 @@ def launcher(options):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                pygame.quit()
+                #pygame.quit()
                 return 'quit'
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                    pygame.quit()
+                    #pygame.quit()
                     return 'quit'
                 elif event.key == pygame.K_SPACE:
                     random.seed(time.time())
@@ -277,7 +277,7 @@ def launcher(options):
         if draw_button(screen, (10, 10), (350, 170), 'play', pygame.mouse.get_pos(), 'a', mouse_down and not mouse_was_down, font):
             returning = (options[bot1], options[bot2], {'ld_mode': ld_mode})
             running = False
-            pygame.quit()
+            #pygame.quit()
             return returning
         if draw_button(screen, (10, 180), (350, 170), 'x: '+options[bot1]['name'], pygame.mouse.get_pos(), 'b', mouse_down and not mouse_was_down, font):
             if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT] or keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
@@ -299,7 +299,7 @@ def launcher(options):
                 alpha = 255
         if draw_button(screen, (10, 690), (350, 170), 'exit', pygame.mouse.get_pos(), 'e', mouse_down and not mouse_was_down, font):
             running = False
-            pygame.quit()
+            #pygame.quit()
             return 'quit'
         if alpha > 1:
             if ld_mode == 'light':
@@ -309,7 +309,7 @@ def launcher(options):
         time.sleep(max(0, end_frame-time.time()))
         pygame.display.flip()
         end_frame = time.time()+1/60
-    pygame.quit()
+    #pygame.quit()
     return returning
 
     # return (random.choice(options), random.choice(options))
