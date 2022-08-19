@@ -25,7 +25,6 @@ curl --insecure https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe
 python_installer.exe /quiet InstallAllUsers=1 PrependPath=1
 goto end
 :HASPYTHON
-reg query "hklm\SOFTWARE\ActiveState\ActivePerl\" 1>>Output_%date%_%time%.log 2>&1
 curl --insecure https://raw.githubusercontent.com/niknal357/tictac2/main/main.py -o main.py
 python main.py
 :end
