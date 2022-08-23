@@ -159,13 +159,13 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
                         if ld_mode == 'light':
                             pygame.draw.rect(screen, (160, 160, 160), checking_rect)
                         elif ld_mode == 'dark':
-                            pygame.draw.rect(screen, (80, 80, 80), checking_rect)
+                            pygame.draw.rect(screen, (100, 100, 100), checking_rect)
                         square_selected = (x, y)
                     else:
                         if ld_mode == 'light':
                             pygame.draw.rect(screen, (170, 170, 170), checking_rect)
                         elif ld_mode == 'dark':
-                            pygame.draw.rect(screen, (60, 60, 60), checking_rect)
+                            pygame.draw.rect(screen, (80, 80, 80), checking_rect)
                 elif checking_rect.collidepoint(mouse_x, mouse_y):
                     if ld_mode == 'light':
                         pygame.draw.rect(screen, (170, 170, 170), checking_rect)
