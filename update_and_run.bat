@@ -7,9 +7,6 @@ echo Installing python, please wait...
 curl --insecure https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe -o python_installer.exe
 python_installer.exe /passive InstallAllUsers=1 PrependPath=1
 set PATH=%PATH%,C:\Program Files\Python310\python.exe
-echo RESTART LAUNCHER AFTER IT CLOSES
-echo RESTART LAUNCHER AFTER IT CLOSES
-echo RESTART LAUNCHER AFTER IT CLOSES
 :HASPYTHON
 curl --insecure https://raw.githubusercontent.com/niknal357/tictac2/main/main.py -o main.py
 python main.py
