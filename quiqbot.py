@@ -1,5 +1,6 @@
 #mod_type: bot
 #bot_name: Quiqbot
+#version: 1.0.0
 import random
 try:
     import ujson as json
