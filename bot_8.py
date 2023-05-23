@@ -1,5 +1,6 @@
 #mod_type: bot
 #bot_name: Bot 8
+#version: 1.0.0
 
 import json
 import random

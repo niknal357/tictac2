@@ -1,6 +1,6 @@
-#mod_type: bot
-#bot_name: Quiqbot
-#version: 1.0.0
+# mod_type: bot
+# bot_name: Quiqbot
+# version: 1.0.0
 import random
 try:
     import ujson as json
@@ -12,6 +12,8 @@ INFLATED_OFFSETS = [(-2, -2), (0, -2), (2, -2), (-2, 0), (2, 0), (-2, 2), (0, 2)
 
 ALLDIRS = [(-1, 1), (0, 1), (1, 1), (-1, 0),
            (1, 0), (-1, -1), (0, -1), (1, -1)]
+
+
 def bot(grid, playing_as):
     opponent = 'x'
     if playing_as == 'x':
@@ -56,17 +58,23 @@ def bot(grid, playing_as):
         yield quiq
     yield
     yield random.choice(get_inflated_pos(grid))
+
+
 def get_of_grid_3(grid, pos):
     if pos[0] < 0 or pos[0] > len(grid)-1 or pos[1] < 0 or pos[1] > len(grid[0])-1:
         return 'n'
     else:
         return grid[pos[0]][pos[1]]
+
+
 def invertDir(dir):
     return (-dir[0], -dir[1])
 
 
 def dirToStr(dir):
     return str(dir[0])+'x'+str(dir[1])
+
+
 def Quiqfinder(grid, placing_as):
     patterns = [
         #      placing: V
@@ -93,8 +101,8 @@ def Quiqfinder(grid, placing_as):
         # to_line_3('_x__x__--'),
         # to_line_3('-_x___x_-'),
     ]
-    #x_s = list(range(len(grid)))
-    #y_s = list(range(len(grid[0])))
+    # x_s = list(range(len(grid)))
+    # y_s = list(range(len(grid[0])))
     # random.shuffle(x_s)
     # random.shuffle(y_s)
     # for x in x_s:
@@ -116,11 +124,15 @@ def Quiqfinder(grid, placing_as):
                         if cnt >= 2:
                             return (x, y)
     return None
+
+
 def to_line_3(string):
     out = []
     for char in string:
         out.append(char)
     return out
+
+
 def get_line_3(grid, pos, dist, dir, invert=False):
     out = []
     for i in range(dist):
@@ -145,6 +157,8 @@ def intersect_lines(l1, l2):
         if l1[i] != '-' and l2[i] != '-' and l1[i] != l2[i]:
             return False
     return True
+
+
 def get_inflated_pos(grid):
     out = []
     for x in range(len(grid)):
@@ -154,7 +168,7 @@ def get_inflated_pos(grid):
             for offset in INFLATED_OFFSETS:
                 x_offset = offset[0]
                 y_offset = offset[1]
-                #print(x+x_offset, y+y_offset)
+                # print(x+x_offset, y+y_offset)
                 if get_of_grid_3(grid, (x+x_offset, y+y_offset)) in ['x', 'o']:
                     out.append((x, y))
                     break
@@ -172,6 +186,8 @@ def get_inflated_pos(grid):
     if len(out) == 0:
         out.append((len(grid)//2, len(grid[0])//2))
     return out
+
+
 def get_possible_positions(grid):
     possible_positions = []
     for x in range(len(grid)):

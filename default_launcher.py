@@ -1,4 +1,5 @@
 # mod_type: launcher
+# version: 1.0.0
 
 import colorsys
 import time

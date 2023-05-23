@@ -1,5 +1,6 @@
 # mod_type: bot
 # bot_name: Bot 3
+# version: 1.0.0
 
 def get_of_grid_3(grid, pos):
     if pos[0] < 0 or pos[0] > len(grid)-1 or pos[1] < 0 or pos[1] > len(grid[0])-1:
@@ -56,7 +57,7 @@ def eval_line_3(line_ingrid):
         {'value': 3,     'line': list('----o_o--')},
         {'value': 2,     'line': list('---oo_---')},
         {'value': 1,     'line': list('----x_---')},
-        #{'value': 0,    'line': to_line_3('----o_---')},
+        # {'value': 0,    'line': to_line_3('----o_---')},
     ]
     value = 0
     for line_inlist in lines:

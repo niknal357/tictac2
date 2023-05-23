@@ -1,8 +1,8 @@
 # mod_type: bot
-# bot_name: Bot 7
+# bot_name: Bot 6 RAND
 # version: 1.0.0
-
 import random
+import time
 try:
     import ujson as json
 except:
@@ -14,122 +14,10 @@ ALLDIRS = [(-1, 1), (0, 1), (1, 1), (-1, 0),
            (1, 0), (-1, -1), (0, -1), (1, -1)]
 
 
-def invertDir(dir):
-    return (-dir[0], -dir[1])
-
-
 def bot(grid, playing_as):
-    global global_text
-    global_text = ''
-    opponent = 'x'
-    if playing_as == 'x':
-        opponent = 'o'
-    cp_grid = json.loads(json.dumps(grid))
-    possible_positions = get_possible_positions(grid)
-    random.shuffle(possible_positions)
-    lines = [
-        list('---xx_xx-'),
-        list('--xxx_x--'),
-        list('-xxxx_---'),
-        list('--xoo_oo-'),
-        list('-xooo_o--'),
-        list('xoooo_---'),
-        list('noooo_---'),
-        list('x-ooo_o--'),
-        list('--ooo_o--'),
-        list('-_xxx_---'),
-        list('--_xx_x_-'),
-        list('-_ooo_---'),
-        list('--_oo_o_-'),
-        list('---oo_o_-'),
-        list('--_oo_o--'),
-    ]
-    for line_to_defo in lines:
-        yield
-        for pos in possible_positions:
-            lines_to_check = []
-            for x in range(-1, 2):
-                for y in range(-1, 2):
-                    if x != 0 or y != 0:
-                        dir = (x, y)
-                        lines_to_check.append(get_line_3(
-                            grid, (pos[0]-dir[0]*5, pos[1]-dir[1]*5), 9, dir, playing_as == 'o'))
-            for line in lines_to_check:
-                if intersect_lines(line_to_defo, line):
-                    yield pos
-    yield
-    cp_grid = json.loads(json.dumps(grid))
-    # for pos in get_all_grid_poss(len(grid), len(grid[0])):
-    #    yield
-    #    if grid[pos[0]][pos[1]] == '_':
-    #        cp_grid[pos[0]][pos[1]] = playing_as
-    #        if determine_win(grid, playing_as, playing_as, 4):
-    #            yield pos
-    #        cp_grid[pos[0]][pos[1]] = '_'
-    quiq = Quiqfinder(grid, playing_as)
-    if quiq != None:
-        yield quiq
-    quiq = Quiqfinder(grid, opponent)
-    if quiq != None:
-        yield quiq
-    poss = get_inflated_pos(grid)
-    # print(poss)
-    i = 0
-    quiq_time = 0
-    stress_time = 0
-
-    for pos in poss:
-        i += 1
-        global_text = str(i)+' / '+str(len(poss)*4)
-        print(str(i)+' / '+str(len(poss)*4))
-        yield global_text
-        if grid[pos[0]][pos[1]] == '_':
-            cp_grid[pos[0]][pos[1]] = playing_as
-            if calculate_stress(cp_grid, playing_as, return_on=1) >= 1 and Quiqfinder(cp_grid, playing_as) != None:
-                print('epic opportunity found')
-                yield pos
-            cp_grid[pos[0]][pos[1]] = '_'
-    for pos in poss:
-        i += 1
-        global_text = str(i)+' / '+str(len(poss)*4)
-        print(str(i)+' / '+str(len(poss)*4))
-        yield global_text
-        if grid[pos[0]][pos[1]] == '_':
-            cp_grid[pos[0]][pos[1]] = opponent
-            if calculate_stress(cp_grid, opponent, return_on=1) >= 1 and Quiqfinder(cp_grid, opponent) != None:
-                print('danger found')
-                yield pos
-            cp_grid[pos[0]][pos[1]] = '_'
-    for pos in poss:
-        i += 1
-        global_text = str(i)+' / '+str(len(poss)*4)
-        print(str(i)+' / '+str(len(poss)*4))
-        yield global_text
-        x = pos[0]
-        y = pos[1]
-        cp_grid[x][y] = playing_as
-        if Quiqfinder(cp_grid, playing_as) != None:
-            yield pos
-        cp_grid[x][y] = '_'
-    for pos in poss:
-        i += 1
-        global_text = str(i)+' / '+str(len(poss)*4)
-        print(str(i)+' / '+str(len(poss)*4))
-        yield global_text
-        x = pos[0]
-        y = pos[1]
-        cp_grid[x][y] = opponent
-        if calculate_stress(cp_grid, opponent, return_on=2) >= 2:
-            yield pos
-        cp_grid[x][y] = '_'
-
-    bot = bot_6(grid, playing_as)
-    while True:
-        yield next(bot)
-    # yield next(bot_3(grid, playing_as))
-
-
-def bot_6(grid, playing_as):
+    random.seed(time.time())
+    if random.random() < 0.05:
+        yield random.choice(get_inflated_pos(grid))
     opponent = 'x'
     if playing_as == 'x':
         opponent = 'o'
@@ -169,32 +57,75 @@ def bot_6(grid, playing_as):
                     yield pos
     poss = []
     yield
-    quiq = Quiqfinder(grid, playing_as)
-    if quiq != None:
-        yield quiq
-    yield
-    quiq = Quiqfinder(grid, opponent)
-    if quiq != None:
-        yield quiq
-    yield
-    for x, line in enumerate(calculate_grid_intersection_values(grid, 'x')):
+    if random.random() < 0.9:
+        quiq = Quiqfinder(grid, playing_as)
+        if quiq != None:
+            yield quiq
         yield
-        for y, col in enumerate(line):
-            poss.append({'pos': (x, y), 'val': col})
-    for x, line in enumerate(calculate_grid_intersection_values(grid, 'o')):
+        quiq = Quiqfinder(grid, opponent)
+        if quiq != None:
+            yield quiq
         yield
-        for y, col in enumerate(line):
-            poss.append({'pos': (x, y), 'val': col})
-    poss = sorted(poss, key=lambda d: d['val'])
-    poss.reverse()
-    yield
-    positions_to_go = []
-    for pos in poss:
-        if pos['val'] >= poss[0]['val']:
-            positions_to_go.append(pos['pos'])
-        else:
-            break
-    yield random.choice(positions_to_go)
+    if random.random() < 0.9:
+        for x, line in enumerate(calculate_grid_intersection_values(grid, 'x')):
+            yield
+            for y, col in enumerate(line):
+                poss.append({'pos': (x, y), 'val': col})
+        for x, line in enumerate(calculate_grid_intersection_values(grid, 'o')):
+            yield
+            for y, col in enumerate(line):
+                poss.append({'pos': (x, y), 'val': col})
+        poss = sorted(poss, key=lambda d: d['val'])
+        poss.reverse()
+        yield
+        positions_to_go = []
+        for pos in poss:
+            if pos['val'] >= poss[0]['val']:
+                positions_to_go.append(pos['pos'])
+            else:
+                break
+        yield random.choice(positions_to_go)
+    yield random.choice(get_inflated_pos(grid))
+
+
+def get_of_grid_3(grid, pos):
+    if pos[0] < 0 or pos[0] > len(grid)-1 or pos[1] < 0 or pos[1] > len(grid[0])-1:
+        return 'n'
+    else:
+        return grid[pos[0]][pos[1]]
+
+
+def get_inflated_pos(grid):
+    out = []
+    for x in range(len(grid)):
+        for y in range(len(grid[0])):
+            if get_of_grid_3(grid, (x, y)) != '_':
+                continue
+            for offset in INFLATED_OFFSETS:
+                x_offset = offset[0]
+                y_offset = offset[1]
+                # print(x+x_offset, y+y_offset)
+                if get_of_grid_3(grid, (x+x_offset, y+y_offset)) in ['x', 'o']:
+                    out.append((x, y))
+                    break
+            # for x_offset in range(-2, 3):
+            #    for y_offset in range(-2, 3):
+            #        if x_offset == 0 and y_offset == 0:
+            #            continue
+            #        if get_of_grid_3(grid, (x+x_offset, y+y_offset)) in ['x', 'o']:
+            #            out.append((x, y))
+            #            done = True
+            #            break
+            #    if done:
+            #        break
+    # print(out)
+    if len(out) == 0:
+        out.append((len(grid)//2, len(grid[0])//2))
+    return out
+
+
+def invertDir(dir):
+    return (-dir[0], -dir[1])
 
 
 def calculate_grid_intersection_values(grid, calculating_for):
@@ -225,6 +156,10 @@ def calculate_grid_intersection_values(grid, calculating_for):
                         else:
                             value_grid[x+dir[0]*i][y+dir[1]*i] = 0
     return value_grid
+
+
+def dirToStr(dir):
+    return str(dir[0])+'x'+str(dir[1])
 
 
 def Quiqfinder(grid, placing_as):
@@ -277,11 +212,11 @@ def Quiqfinder(grid, placing_as):
     return None
 
 
-def get_of_grid_3(grid, pos):
-    if pos[0] < 0 or pos[0] > len(grid)-1 or pos[1] < 0 or pos[1] > len(grid[0])-1:
-        return 'n'
-    else:
-        return grid[pos[0]][pos[1]]
+def to_line_3(string):
+    out = []
+    for char in string:
+        out.append(char)
+    return out
 
 
 def get_line_3(grid, pos, dist, dir, invert=False):
@@ -299,45 +234,6 @@ def get_line_3(grid, pos, dist, dir, invert=False):
         else:
             out.append(item)
     return out
-
-
-def get_all_grid_poss(x_len, y_len):
-    for x in range(x_len):
-        for y in range(y_len):
-            yield (x, y)
-
-
-def calculate_stress(grid, stress_from, return_on=1000000000000):
-    # positions = get_list_of_grid(grid)
-    # positions = inflate_gridlist(
-    #    positions, GRID_SIZE_X-1, GRID_SIZE_Y-1, amount=2, offset_x=-3, offset_y=-3)
-    lines = [
-        {'line': list('_xxxx_'), 'val': 2},
-        {'line': list('_xxxxo'), 'val': 1.5},
-        {'line': list('__xxx__'), 'val': 1},
-        # {'line': to_line_3('_x_x_x_'), 'val': 1},
-        # {'line': to_line_3('_x__xx_'), 'val': 1},
-        # {'line': to_line_3('_xx__x_'), 'val': 1},  # ?
-        {'line': list('_x_xx_'), 'val': 1},
-        {'line': list('_xxx_o'), 'val': 1},  # ?
-    ]
-    positions = []
-    total_stress = 0
-    for pos in get_all_grid_poss(len(grid), len(grid[0])):
-        x, y = pos
-        dirs_done = []
-        for dir in ALLDIRS:
-            if invertDir(dir) in dirs_done:
-                continue
-            line_1 = get_line_3(grid, (x, y), 6, dir, stress_from == 'o')
-            line_2 = get_line_3(grid, (x, y), 7, dir, stress_from == 'o')
-            for stress_yes in lines:
-                if intersect_lines(stress_yes['line'], line_1) or intersect_lines(stress_yes['line'], line_2):
-                    total_stress += stress_yes['val']
-                    dirs_done.append(dir)
-                if total_stress >= return_on:
-                    return total_stress
-    return total_stress
 
 
 def intersect_lines(l1, l2):

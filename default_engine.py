@@ -1,10 +1,14 @@
-#mod_type: engine
+# mod_type: engine
+# version: 1.0.0
+import time
 import sys
 import subprocess
+
+
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", "--trusted-host", "pypi.org",
                           "--trusted-host", "pypi.python.org", "--trusted-host", "files.pythonhosted.org", package])
-import time
+
 
 try:
     import pygame
@@ -12,8 +16,11 @@ except:
     install('pygame')
     import pygame
 
+
 def lerp(a, b, p):
     return a+b*p-a*p
+
+
 def scan_for_win_and_return(grid, grid_onscreen_positions):
     GRID_SIZE_X = len(grid)
     GRID_SIZE_Y = len(grid[0])
@@ -46,27 +53,33 @@ def scan_for_win_and_return(grid, grid_onscreen_positions):
             if horizonal_check:
                 if grid[x][y] == grid[x+1][y] and grid[x][y] == grid[x+2][y] and grid[x][y] == grid[x+3][y] and grid[x][y] == grid[x+4][y]:
                     win = grid[x][y]
-                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['center_y'], grid_onscreen_positions[x+4][y]['right_spaced'], grid_onscreen_positions[x+4][y]['center_y'])
+                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['center_y'],
+                               grid_onscreen_positions[x+4][y]['right_spaced'], grid_onscreen_positions[x+4][y]['center_y'])
                     break
             if vertical_check:
                 if grid[x][y] == grid[x][y+1] and grid[x][y] == grid[x][y+2] and grid[x][y] == grid[x][y+3] and grid[x][y] == grid[x][y+4]:
                     win = grid[x][y]
-                    winline = (grid_onscreen_positions[x][y]['center_x'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[x][y+4]['center_x'], grid_onscreen_positions[x][y+4]['bottom_spaced'])
+                    winline = (grid_onscreen_positions[x][y]['center_x'], grid_onscreen_positions[x][y]['top_spaced'],
+                               grid_onscreen_positions[x][y+4]['center_x'], grid_onscreen_positions[x][y+4]['bottom_spaced'])
                     break
             if diagonal_check_upwards:
                 if grid[x][y] == grid[x+1][y+1] and grid[x][y] == grid[x+2][y+2] and grid[x][y] == grid[x+3][y+3] and grid[x][y] == grid[x+4][y+4]:
                     win = grid[x][y]
-                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[x+4][y+4]['right_spaced'], grid_onscreen_positions[x+4][y+4]['bottom_spaced'])
+                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'],
+                               grid_onscreen_positions[x+4][y+4]['right_spaced'], grid_onscreen_positions[x+4][y+4]['bottom_spaced'])
                     break
             if diagonal_check_downwards:
                 if grid[x][y] == grid[x+1][y-1] and grid[x][y] == grid[x+2][y-2] and grid[x][y] == grid[x+3][y-3] and grid[x][y] == grid[x+4][y-4]:
-                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced'], grid_onscreen_positions[x+4][y-4]['right_spaced'], grid_onscreen_positions[x+4][y-4]['top_spaced'])
+                    winline = (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced'],
+                               grid_onscreen_positions[x+4][y-4]['right_spaced'], grid_onscreen_positions[x+4][y-4]['top_spaced'])
                     win = grid[x][y]
                     break
     if win == '_' and fail == False:
         win = '-'
     return (win, winline)
-def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
+
+
+def engine(bot1, bot2, grid_size=(128, 128), other_settings={}):
     if 'ld_mode' not in other_settings:
         ld_mode = 'dark'
     else:
@@ -75,9 +88,10 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
     for x in range(grid_size[0]):
         grid.append(['_']*grid_size[1])
     pygame.init()
-    font = pygame.font.SysFont("Calibri", 24)
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     x_size, y_size = screen_size = screen.get_size()
+    font = pygame.font.SysFont("Calibri", int(
+        24/2202.90717*(x_size**2+y_size**2)**0.5))
     lines = []
     playing_field_size = (0, 0)
     end_frame = 0
@@ -85,8 +99,10 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
     mouse_down = True
     last_placed = None
     while playing_field_size[0] <= x_size and playing_field_size[1] <= y_size:
-        playing_field_size = (playing_field_size[0]+grid_size[0], playing_field_size[1]+grid_size[1])
-    playing_field_size = (playing_field_size[0]-grid_size[0], playing_field_size[1]-grid_size[1])
+        playing_field_size = (
+            playing_field_size[0]+grid_size[0], playing_field_size[1]+grid_size[1])
+    playing_field_size = (
+        playing_field_size[0]-grid_size[0], playing_field_size[1]-grid_size[1])
     playing_field_size = (playing_field_size[0]*0.9, playing_field_size[1]*0.9)
     grid_top = y_size/2-playing_field_size[1]/2
     grid_bottom = y_size/2+playing_field_size[1]/2
@@ -96,9 +112,11 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
     for i in range(grid_size[0]):
         grid_onscreen_positions.append([None]*grid_size[1])
     for i in range(grid_size[0]+1):
-        lines.append(((lerp(grid_left, grid_right, i/grid_size[0]), grid_top), (lerp(grid_left, grid_right, i/grid_size[0]), grid_bottom)))
+        lines.append(((lerp(grid_left, grid_right, i/grid_size[0]), grid_top), (lerp(
+            grid_left, grid_right, i/grid_size[0]), grid_bottom)))
     for i in range(grid_size[1]+1):
-        lines.append(((grid_left, lerp(grid_top, grid_bottom, i/grid_size[1])), (grid_right, lerp(grid_top, grid_bottom, i/grid_size[1]))))
+        lines.append(((grid_left, lerp(grid_top, grid_bottom, i /
+                     grid_size[1])), (grid_right, lerp(grid_top, grid_bottom, i/grid_size[1]))))
     for x in range(grid_size[0]):
         for y in range(grid_size[1]):
             x_left = (x)/grid_size[0]
@@ -107,7 +125,8 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
             y_bottom = (y+1)/grid_size[1]
             x_norm = (x+0.5)/grid_size[0]
             y_norm = (y+0.5)/grid_size[1]
-            grid_onscreen_positions[x][y] = {'bottom_spaced': lerp(grid_top, grid_bottom, y_bottom)-1, 'top_spaced': lerp(grid_top, grid_bottom, y_top)+3, 'right_spaced': lerp(grid_left, grid_right, x_right)-1, 'left_spaced': lerp(grid_left, grid_right, x_left)+3, 'bottom': lerp(grid_top, grid_bottom, y_bottom)+1, 'top': lerp(grid_top, grid_bottom, y_top)+1, 'right': lerp(grid_left, grid_right, x_right)+1, 'left': lerp(grid_left, grid_right, x_left)+1, 'center_x': lerp(grid_left, grid_right, x_norm), 'center_y': lerp(grid_top, grid_bottom, y_norm)}
+            grid_onscreen_positions[x][y] = {'bottom_spaced': lerp(grid_top, grid_bottom, y_bottom)-1, 'top_spaced': lerp(grid_top, grid_bottom, y_top)+3, 'right_spaced': lerp(grid_left, grid_right, x_right)-1, 'left_spaced': lerp(grid_left, grid_right, x_left)+3, 'bottom': lerp(
+                grid_top, grid_bottom, y_bottom)+1, 'top': lerp(grid_top, grid_bottom, y_top)+1, 'right': lerp(grid_left, grid_right, x_right)+1, 'left': lerp(grid_left, grid_right, x_left)+1, 'center_x': lerp(grid_left, grid_right, x_norm), 'center_y': lerp(grid_top, grid_bottom, y_norm)}
     running = True
     bot1_func = bot1['func']
     bot2_func = bot2['func']
@@ -153,46 +172,60 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
         square_selected = None
         for x in range(grid_size[0]):
             for y in range(grid_size[1]):
-                checking_rect = pygame.Rect(grid_onscreen_positions[x][y]['left'], grid_onscreen_positions[x][y]['top'], grid_onscreen_positions[x][y]['right']-grid_onscreen_positions[x][y]['left'], grid_onscreen_positions[x][y]['bottom']-grid_onscreen_positions[x][y]['top'])
+                checking_rect = pygame.Rect(grid_onscreen_positions[x][y]['left'], grid_onscreen_positions[x][y]['top'], grid_onscreen_positions[x]
+                                            [y]['right']-grid_onscreen_positions[x][y]['left'], grid_onscreen_positions[x][y]['bottom']-grid_onscreen_positions[x][y]['top'])
                 if (x, y) == last_placed:
                     if checking_rect.collidepoint(mouse_x, mouse_y):
                         if ld_mode == 'light':
-                            pygame.draw.rect(screen, (160, 160, 160), checking_rect)
+                            pygame.draw.rect(
+                                screen, (160, 160, 160), checking_rect)
                         elif ld_mode == 'dark':
-                            pygame.draw.rect(screen, (100, 100, 100), checking_rect)
+                            pygame.draw.rect(
+                                screen, (80, 80, 80), checking_rect)
                         square_selected = (x, y)
                     else:
                         if ld_mode == 'light':
-                            pygame.draw.rect(screen, (170, 170, 170), checking_rect)
+                            pygame.draw.rect(
+                                screen, (170, 170, 170), checking_rect)
                         elif ld_mode == 'dark':
-                            pygame.draw.rect(screen, (80, 80, 80), checking_rect)
+                            pygame.draw.rect(
+                                screen, (60, 60, 60), checking_rect)
                 elif checking_rect.collidepoint(mouse_x, mouse_y):
                     if ld_mode == 'light':
-                        pygame.draw.rect(screen, (170, 170, 170), checking_rect)
+                        pygame.draw.rect(
+                            screen, (170, 170, 170), checking_rect)
                     elif ld_mode == 'dark':
                         pygame.draw.rect(screen, (60, 60, 60), checking_rect)
                     square_selected = (x, y)
                 if grid[x][y] == 'x':
                     if ld_mode == 'light':
-                        pygame.draw.line(screen, (140, 90, 90), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
-                        pygame.draw.line(screen, (140, 90, 90), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
+                        pygame.draw.line(screen, (140, 90, 90), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (
+                            grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
+                        pygame.draw.line(screen, (140, 90, 90), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (
+                            grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
                     elif ld_mode == 'dark':
-                        pygame.draw.line(screen, (255, 128, 128), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
-                        pygame.draw.line(screen, (255, 128, 128), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
+                        pygame.draw.line(screen, (255, 128, 128), (grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (
+                            grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
+                        pygame.draw.line(screen, (255, 128, 128), (grid_onscreen_positions[x][y]['right_spaced'], grid_onscreen_positions[x][y]['top_spaced']), (
+                            grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']), width=2)
                 if grid[x][y] == 'o':
                     if ld_mode == 'light':
-                        pygame.draw.ellipse(screen, (60, 140, 60), pygame.Rect(grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[x][y]['right_spaced']-grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']-grid_onscreen_positions[x][y]['top_spaced']), width=2)
+                        pygame.draw.ellipse(screen, (60, 140, 60), pygame.Rect(grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[
+                                            x][y]['right_spaced']-grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']-grid_onscreen_positions[x][y]['top_spaced']), width=2)
                     elif ld_mode == 'dark':
-                        pygame.draw.ellipse(screen, (128, 255, 128), pygame.Rect(grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[x][y]['right_spaced']-grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']-grid_onscreen_positions[x][y]['top_spaced']), width=2)
+                        pygame.draw.ellipse(screen, (128, 255, 128), pygame.Rect(grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['top_spaced'], grid_onscreen_positions[
+                                            x][y]['right_spaced']-grid_onscreen_positions[x][y]['left_spaced'], grid_onscreen_positions[x][y]['bottom_spaced']-grid_onscreen_positions[x][y]['top_spaced']), width=2)
         for line in lines:
-            pygame.draw.line(screen, (128, 128, 128), line[0], line[1], width=2)
+            pygame.draw.line(screen, (128, 128, 128),
+                             line[0], line[1], width=2)
         if bot_func == 'human':
             if square_selected != None:
                 if mouse_down and not mouse_was_down:
                     if grid[square_selected[0]][square_selected[1]] == '_':
                         grid[square_selected[0]][square_selected[1]] = turn
                         last_placed = square_selected
-                        winstate = scan_for_win_and_return(grid, grid_onscreen_positions)
+                        winstate = scan_for_win_and_return(
+                            grid, grid_onscreen_positions)
                         winline = winstate[1]
                         if winstate[0] == turn:
                             if turn == 'x':
@@ -210,7 +243,7 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
                                 turn = 'x'
                         bot_func = None
         elif bot_func != 'turns off':
-            end_processing_time = time.time()+1/10
+            end_processing_time = time.time()+1/60
             res = None
             while end_processing_time > time.time():
                 res = next(bot_func)
@@ -222,7 +255,8 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
                 if grid[res[0]][res[1]] == '_':
                     grid[res[0]][res[1]] = turn
                     last_placed = res
-                    winstate = scan_for_win_and_return(grid, grid_onscreen_positions)
+                    winstate = scan_for_win_and_return(
+                        grid, grid_onscreen_positions)
                     winline = winstate[1]
                     if winstate[0] == turn:
                         if turn == 'x':
@@ -262,14 +296,14 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
             vert_pos += 30
             txt = ''
         else:
-            #txt += 'turn: '+turn
-            #if ld_mode == 'light':
+            # txt += 'turn: '+turn
+            # if ld_mode == 'light':
             #    text = font.render(txt, True, (0, 0, 0))
-            #elif ld_mode == 'dark':
+            # elif ld_mode == 'dark':
             #    text = font.render(txt, True, (255, 255, 255))
-            #screen.blit(text, (10, vert_pos))
-            #vert_pos += 30
-            #txt = ''
+            # screen.blit(text, (10, vert_pos))
+            # vert_pos += 30
+            # txt = ''
             txt += 'current turn: '
             if turn == 'x':
                 txt += 'X ('+bot1['name']+')'
@@ -283,7 +317,7 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
             vert_pos += 30
             txt = ''
             if thinking_text != '':
-                txt+='bot is thinking: '+thinking_text
+                txt += 'bot is thinking: '+thinking_text
                 if ld_mode == 'light':
                     text = font.render(txt, True, (0, 0, 0))
                 elif ld_mode == 'dark':
@@ -293,9 +327,11 @@ def engine(bot1, bot2, grid_size=(20, 20), other_settings={}):
                 txt = ''
         if winline != None:
             if ld_mode == 'light':
-                pygame.draw.line(screen, (70, 70, 70), (winline[0], winline[1]), (winline[2], winline[3]), width=3)
+                pygame.draw.line(
+                    screen, (70, 70, 70), (winline[0], winline[1]), (winline[2], winline[3]), width=3)
             elif ld_mode == 'dark':
-                pygame.draw.line(screen, (255, 255, 255), (winline[0], winline[1]), (winline[2], winline[3]), width=3)
+                pygame.draw.line(
+                    screen, (255, 255, 255), (winline[0], winline[1]), (winline[2], winline[3]), width=3)
         time.sleep(max(0, end_frame-time.time()))
         pygame.display.flip()
         end_frame = time.time()+1/60
