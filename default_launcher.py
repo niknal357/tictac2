@@ -1,5 +1,6 @@
 # mod_type: launcher
 
+import colorsys
 import time
 import math
 import random
@@ -7,32 +8,37 @@ import os
 import subprocess
 import sys
 
+
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", "--trusted-host", "pypi.org",
                           "--trusted-host", "pypi.python.org", "--trusted-host", "files.pythonhosted.org", package])
+
+
 try:
     import pygame
 except:
     install('pygame')
     import pygame
-#from perlin_noise import PerlinNoise
-import colorsys
+# from perlin_noise import PerlinNoise
 
-#noise = PerlinNoise(octaves=2)
+# noise = PerlinNoise(octaves=2)
 
 VERSION = 'dev0.1'
 
 C_BLACK = (0, 0, 0)
 C_WHITE = (255, 255, 255)
 
+
 def lerp(a, b, p):
     return a+b*p-a*p
+
 
 button_selections = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'e': 0}
 
 ld_mode = 'dark'
 
 BUTTON_ENLARGEMENT = 10
+
 
 def draw_button(surface: pygame.Surface, region_top_left_corner: tuple, region_size: tuple, txt: str, mouse_pos: tuple, id: str, mouse_down: bool, font: pygame.font.Font):
     global button_selections
@@ -56,15 +62,19 @@ def draw_button(surface: pygame.Surface, region_top_left_corner: tuple, region_s
     else:
         button_selections[id] *= 0.9
     if ld_mode == 'light':
-        draw_polygon_alpha(surface, (0, 0, 0, lerp(180, 230, button_selections[id])), [(left, top), (right, top), (right, bottom), (left, bottom)])
+        draw_polygon_alpha(surface, (0, 0, 0, lerp(180, 230, button_selections[id])), [
+                           (left, top), (right, top), (right, bottom), (left, bottom)])
         text = font.render(txt, True, (255, 255, 255))
     elif ld_mode == 'dark':
-        draw_polygon_alpha(surface, (255, 255, 255, lerp(128, 200, button_selections[id])), [(left, top), (right, top), (right, bottom), (left, bottom)])
+        draw_polygon_alpha(surface, (255, 255, 255, lerp(128, 200, button_selections[id])), [
+                           (left, top), (right, top), (right, bottom), (left, bottom)])
         text = font.render(txt, True, (0, 0, 0))
-    surface.blit(text, (full_left+region_size[0]/2-font.size(txt)[0]/2, full_top+region_size[1]/2-font.size(txt)[1]/2))
+    surface.blit(text, (full_left+region_size[0]/2-font.size(txt)[
+                 0]/2, full_top+region_size[1]/2-font.size(txt)[1]/2))
     if collide and mouse_down:
         return True
     return False
+
 
 def draw_polygon_alpha(surface, color, points):
     lx, ly = zip(*points)
@@ -82,9 +92,16 @@ radius = math.sqrt(2*((0.3*splitage) ** 2))
 
 bot1 = 0
 bot2 = -1
+
+hints_showing = {
+    'click_to_change_bot': True
+}
+
+
 def launcher(options):
     global bot1
     global bot2
+    global hints_showing
     alpha = 0
     global ld_mode
     returning = 'quit'
@@ -114,8 +131,8 @@ def launcher(options):
         alpha *= 0.95
         mouse_was_down = mouse_down
         mouse_down = pygame.mouse.get_pressed(num_buttons=3)[0]
-        bot1 = bot1%len(options)
-        bot2 = bot2%len(options)
+        bot1 = bot1 % len(options)
+        bot2 = bot2 % len(options)
         random.seed(time.time())
         # color_vel_x += random.random()*2-1
         # color_vel_y += random.random()*2-1
@@ -205,12 +222,12 @@ def launcher(options):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                #pygame.quit()
+                # pygame.quit()
                 return 'quit'
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                    #pygame.quit()
+                    # pygame.quit()
                     return 'quit'
                 elif event.key == pygame.K_SPACE:
                     random.seed(time.time())
@@ -270,46 +287,54 @@ def launcher(options):
                 (math.cos(math.radians(315+square['rotation']))*square['radius']+center_x, math.sin(
                     math.radians(315+square['rotation']))*square['radius']+center_y),
             ]
-            #pygame.draw.polygon(draw_surface, col, points)
+            # pygame.draw.polygon(draw_surface, col, points)
             draw_polygon_alpha(screen, col, points)
-        #draw_polygon_alpha(screen, (0, 0, 0, 128), [(10, 10), (310, 10), (310, 160), (10, 160)])
+        # draw_polygon_alpha(screen, (0, 0, 0, 128), [(10, 10), (310, 10), (310, 160), (10, 160)])
         keys = pygame.key.get_pressed()
-        if draw_button(screen, (10, 10), (350, 170), 'play', pygame.mouse.get_pos(), 'a', mouse_down and not mouse_was_down, font):
+        if draw_button(screen, (10, 10), (550, 170), 'play', pygame.mouse.get_pos(), 'a', mouse_down and not mouse_was_down, font):
             returning = (options[bot1], options[bot2], {'ld_mode': ld_mode})
             running = False
-            #pygame.quit()
+            # pygame.quit()
             return returning
-        if draw_button(screen, (10, 180), (350, 170), 'x: '+options[bot1]['name'], pygame.mouse.get_pos(), 'b', mouse_down and not mouse_was_down, font):
+        if draw_button(screen, (10, 180), (550, 170), 'x: '+options[bot1]['name'], pygame.mouse.get_pos(), 'b', mouse_down and not mouse_was_down, font):
             if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT] or keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
                 bot1 -= 1
             else:
                 bot1 += 1
-        if draw_button(screen, (10, 350), (350, 170), 'o: '+options[bot2]['name'], pygame.mouse.get_pos(), 'c', mouse_down and not mouse_was_down, font):
+        if draw_button(screen, (10, 350), (550, 170), 'o: '+options[bot2]['name'], pygame.mouse.get_pos(), 'c', mouse_down and not mouse_was_down, font):
             if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT] or keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
                 bot2 -= 1
             else:
                 bot2 += 1
-        if ld_mode =='light':
-            if draw_button(screen, (10, 520), (350, 170), 'dark mode', pygame.mouse.get_pos(), 'd', mouse_down and not mouse_was_down, font):
+            hints_showing['click_to_change_bot'] = False
+        if hints_showing['click_to_change_bot']:
+            txt = '<- click to change bot'
+            text = font.render(txt, True, (0, 0, 0)) if ld_mode == 'light' else font.render(
+                txt, True, (255, 255, 255))
+            screen.blit(text, (560, 435-text.get_height()/2))
+        if ld_mode == 'light':
+            if draw_button(screen, (10, 520), (550, 170), 'dark mode', pygame.mouse.get_pos(), 'd', mouse_down and not mouse_was_down, font):
                 ld_mode = 'dark'
                 alpha = 255
-        elif ld_mode =='dark':
-            if draw_button(screen, (10, 520), (350, 170), 'light mode', pygame.mouse.get_pos(), 'd', mouse_down and not mouse_was_down, font):
+        elif ld_mode == 'dark':
+            if draw_button(screen, (10, 520), (550, 170), 'light mode', pygame.mouse.get_pos(), 'd', mouse_down and not mouse_was_down, font):
                 ld_mode = 'light'
                 alpha = 255
-        if draw_button(screen, (10, 690), (350, 170), 'exit', pygame.mouse.get_pos(), 'e', mouse_down and not mouse_was_down, font):
+        if draw_button(screen, (10, 690), (550, 170), 'exit', pygame.mouse.get_pos(), 'e', mouse_down and not mouse_was_down, font):
             running = False
-            #pygame.quit()
+            # pygame.quit()
             return 'quit'
         if alpha > 1:
             if ld_mode == 'light':
-                draw_polygon_alpha(screen, (255, 255, 255, alpha), [(0, 0), (x_size, 0), (x_size, y_size), (0, y_size)])
+                draw_polygon_alpha(screen, (255, 255, 255, alpha), [
+                                   (0, 0), (x_size, 0), (x_size, y_size), (0, y_size)])
             if ld_mode == 'dark':
-                draw_polygon_alpha(screen, (0, 0, 0, alpha), [(0, 0), (x_size, 0), (x_size, y_size), (0, y_size)])
+                draw_polygon_alpha(screen, (0, 0, 0, alpha), [
+                                   (0, 0), (x_size, 0), (x_size, y_size), (0, y_size)])
         time.sleep(max(0, end_frame-time.time()))
         pygame.display.flip()
         end_frame = time.time()+1/60
-    #pygame.quit()
+    # pygame.quit()
     return returning
 
     # return (random.choice(options), random.choice(options))
