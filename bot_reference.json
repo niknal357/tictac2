@@ -1,7 +1,26 @@
 [
-    {"file": "avajaris.py", "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/avajaris.py"},
-    {"file": "bot_3.py", "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_3.py"},
-    {"file": "bot_7.py", "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_7.py"},
-    {"file": "bot_8.py", "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_8.py"},
-    {"file": "quiqbot.py", "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/quiqbot.py"}
+    {
+        "file": "avajaris.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/avajaris.py"
+    },
+    {
+        "file": "bot_3.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_3.py"
+    },
+    {
+        "file": "bot_7.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_7.py"
+    },
+    {
+        "file": "bot_8.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_8.py"
+    },
+    {
+        "file": "quiqbot.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/quiqbot.py"
+    },
+    {
+        "file": "john.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/john.py"
+    }
 ]
