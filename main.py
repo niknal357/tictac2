@@ -4,6 +4,7 @@ import subprocess
 import sys
 import importlib.util
 import random
+from shutil import move
 
 
 def module_from_file(module_name, file_path):
@@ -65,7 +66,8 @@ for filedata in files:
 for filedata in to_dl:
     print('Downloading ' + filedata['file'] + '...')
     subprocess.run(['curl', '-H', "'Cache-Control: no-cache, no-store'", filedata['url'], '-o',
-                   filedata['file']], shell=True)
+                   'dl'], shell=True)
+    move('dl', filedata['file'])
 
 launcher = None
 engine = None
