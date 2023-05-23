@@ -40,8 +40,8 @@
         "version": "1.0.0"
     },
     {
-        "file": "update_and_run.bat",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/update_and_run.bat",
+        "file": "run_tictac2.bat",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/run_tictac2.bat",
         "version": "1.0.0"
     }
 ]
