@@ -67,9 +67,6 @@ for filedata in to_dl:
     subprocess.run(['curl', '-H', "'Cache-Control: no-cache, no-store'", filedata['url'], '-o',
                    filedata['file']], shell=True)
 
-for filedata in to_dl:
-    print('Downloading ' + filedata['file'] + '...')
-
 launcher = None
 engine = None
 bots = [{'name': 'Human', 'func': None}]
