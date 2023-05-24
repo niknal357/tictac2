@@ -101,13 +101,13 @@ for mod in os.listdir('plugins'):
 
 if launcher == None:
     print('No launcher found, downloading default...')
-    subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/default_launcher.py',
+    subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/default_launcher.py',
                    '-o', 'plugins/default_launcher.py'], shell=True)
     launcher = module_from_file(
         'default_launcher.py', 'plugins/default_launcher.py').launcher
 if engine == None:
     print('No engine found, downloading default...')
-    subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/default_engine.py',
+    subprocess.run(['curl', 'https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/default_engine.py',
                    '-o', 'plugins/default_engine.py'], shell=True)
     engine = module_from_file(
         'default_engine.py', 'plugins/default_engine.py').engine

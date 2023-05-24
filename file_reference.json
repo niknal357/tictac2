@@ -1,42 +1,42 @@
 [
     {
         "file": "plugins/avajaris.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/avajaris.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/avajaris.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/bot_3.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_3.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/bot_3.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/bot_7.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_7.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/bot_7.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/bot_8.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/bot_8.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/bot_8.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/quiqbot.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/quiqbot.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/quiqbot.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/john.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/john.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/john.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/default_engine.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/default_engine.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/default_engine.py",
         "version": "1.0.0"
     },
     {
         "file": "plugins/default_launcher.py",
-        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/default_launcher.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/default_launcher.py",
         "version": "1.0.0"
     },
     {
