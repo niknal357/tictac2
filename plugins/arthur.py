@@ -44,7 +44,7 @@ def bot(grid, playing_as):
                     'win_con': '_'
                 })
                 break
-            yield f'{i+1}/{len(possible_moves)} ({steps})'
+            yield f'{i+1}/{len(possible_moves)} ({steps}/20)'
             steps += 1
     moves = sorted(moves, key=lambda d: d['steps'])
     print()
