@@ -1,6 +1,6 @@
 # mod_type: bot
 # bot_name: Arthur
-# version: 1.0.0
+# version: 1.0.1
 
 import random
 import json
