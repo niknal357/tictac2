@@ -30,6 +30,11 @@
         "version": "1.0.0"
     },
     {
+        "file": "plugins/arthur.py",
+        "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/arthur.py",
+        "version": "1.0.0"
+    },
+    {
         "file": "plugins/default_engine.py",
         "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/default_engine.py",
         "version": "1.0.0"
