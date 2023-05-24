@@ -7,6 +7,21 @@ import random
 from shutil import move
 
 
+def version_compare(v1, v2):
+    v1 = v1.split('.')
+    v2 = v2.split('.')
+    for i in range(min(len(v1), len(v2))):
+        if int(v1[i]) > int(v2[i]):
+            return 1
+        elif int(v1[i]) < int(v2[i]):
+            return -1
+    if len(v1) > len(v2):
+        return 1
+    elif len(v1) < len(v2):
+        return -1
+    return 0
+
+
 def module_from_file(module_name, file_path):
     spec = importlib.util.spec_from_file_location(module_name, file_path)
     module = importlib.util.module_from_spec(spec)
@@ -60,7 +75,7 @@ for filedata in files:
     if 'version' not in params:
         to_dl.append(filedata)
         continue
-    if params['version'] != filedata['version']:
+    if version_compare(params['version'], filedata['version']) < 0:
         to_dl.append(filedata)
         continue
 for filedata in to_dl:
