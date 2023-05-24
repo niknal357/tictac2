@@ -1,6 +1,6 @@
 # mod_type: bot
 # bot_name: Arthur
-# version: 1.0.1
+# version: 1.0.2
 
 import random
 import json
@@ -12,10 +12,11 @@ INFLATED_OFFSETS = [(-2, -2), (0, -2), (2, -2), (-2, 0), (2, 0), (-2, 2), (0, 2)
 
 
 def bot(grid, playing_as):
+    MAX_STEPS = 20
     possible_moves = get_possible_positions(grid)
     moves = []
     for i, move in enumerate(possible_moves):
-        yield f'{i+1}/{len(possible_moves)}'
+        yield f'{(i+1)*MAX_STEPS}/{(len(possible_moves)+1)*MAX_STEPS}'
         grid_cp = json.loads(json.dumps(grid))
         next_move = playing_as
         grid_cp[move[0]][move[1]] = next_move
@@ -37,14 +38,14 @@ def bot(grid, playing_as):
                     'win_con': win_con
                 })
                 break
-            if steps > 20:
+            if steps > MAX_STEPS:
                 moves.append({
                     'move': move,
                     'steps': steps,
                     'win_con': '_'
                 })
                 break
-            yield f'{i+1}/{len(possible_moves)} ({steps}/20)'
+            yield f'{(i+1)*MAX_STEPS+steps}/{(len(possible_moves)+1)*MAX_STEPS}'
             steps += 1
     moves = sorted(moves, key=lambda d: d['steps'])
     print()
