@@ -1,53 +1,63 @@
 # mod_type: bot
 # bot_name: Arthur
-# version: 1.0.2
+# version: 1.0.3
 
 import random
 import json
 import math
 from plugins.quiqbot import bot as reference_bot
 
+
+
 INFLATED_OFFSETS = [(-2, -2), (0, -2), (2, -2), (-2, 0), (2, 0), (-2, 2), (0, 2),
                     (2, 2), (-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)]
 
+import threading
+import queue
+import time
+
+def worker(input_queue, output_queue, grid, playing_as):
+    while True:
+        move = input_queue.get()
+        if move is None:
+            break
+        result = assess_move(grid, move, playing_as)
+        output_queue.put(result)
 
 def bot(grid, playing_as):
-    MAX_STEPS = 20
     possible_moves = get_possible_positions(grid)
+    input_queue = queue.Queue()
+    output_queue = queue.Queue()
+    num_threads = 4
+    # Start worker threads
+    threads = []
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(input_queue, output_queue, grid, playing_as))
+        thread.start()
+        threads.append(thread)
+    
+    # Feed the worker threads with moves
+    for move in possible_moves:
+        input_queue.put(move)
+    
+    # Use 'None' as a sentinel value to indicate to workers to finish up
+    for _ in range(num_threads):
+        input_queue.put(None)
+    
+    # Collect results
     moves = []
-    for i, move in enumerate(possible_moves):
-        yield f'{(i+1)*MAX_STEPS}/{(len(possible_moves)+1)*MAX_STEPS}'
-        grid_cp = json.loads(json.dumps(grid))
-        next_move = playing_as
-        grid_cp[move[0]][move[1]] = next_move
-        steps = 1
-        print('---------------------------------------------------------------------')
-        while True:
-            next_move = 'x' if next_move == 'o' else 'o'
-            reference_bot_gen = reference_bot(grid_cp, next_move)
-            mov = None
-            while mov is None:
-                mov = next(reference_bot_gen)
-            # print(mov)
-            grid_cp[mov[0]][mov[1]] = next_move
-            win_con = is_win(grid_cp)
-            if win_con != '_':
-                moves.append({
-                    'move': move,
-                    'steps': steps,
-                    'win_con': win_con
-                })
-                break
-            if steps > MAX_STEPS:
-                moves.append({
-                    'move': move,
-                    'steps': steps,
-                    'win_con': '_'
-                })
-                break
-            yield f'{(i+1)*MAX_STEPS+steps}/{(len(possible_moves)+1)*MAX_STEPS}'
-            steps += 1
+    while len(moves) < len(possible_moves):
+        try:
+            move = output_queue.get(timeout=0.1)
+            moves.append(move)
+            yield f'{len(moves)}/{len(possible_moves)}'
+        except queue.Empty:
+            yield f'{len(moves)}/{len(possible_moves)}'
     moves = sorted(moves, key=lambda d: d['steps'])
+    
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
     print()
     for move in moves:
         print(move)
@@ -60,7 +70,36 @@ def bot(grid, playing_as):
         yield move['move']
     yield random.choice(possible_moves)
 
-
+def assess_move(grid, move, playing_as):
+    grid_cp = json.loads(json.dumps(grid))
+    next_move = playing_as
+    grid_cp[move[0]][move[1]] = next_move
+    steps = 1
+    MAX_STEPS = 20
+    print('---------------------------------------------------------------------')
+    while True:
+        next_move = 'x' if next_move == 'o' else 'o'
+        reference_bot_gen = reference_bot(grid_cp, next_move)
+        mov = None
+        while mov is None:
+            mov = next(reference_bot_gen)
+        # print(mov)
+        grid_cp[mov[0]][mov[1]] = next_move
+        win_con = is_win(grid_cp)
+        if win_con != '_':
+            return {
+                'move': move,
+                'steps': steps,
+                'win_con': win_con
+            }
+        if steps > MAX_STEPS:
+            return {
+                'move': move,
+                'steps': steps,
+                'win_con': '_'
+            }
+        # yield f'{(i+1)*MAX_STEPS+steps}/{(len(possible_moves)+1)*MAX_STEPS}'
+        steps += 1
 def intersect_lines(l1, l2):
     if len(l1) != len(l2):
         return False

@@ -32,7 +32,7 @@
     {
         "file": "plugins/arthur.py",
         "url": "https://raw.githubusercontent.com/niknal357/tictac2/main/plugins/arthur.py",
-        "version": "1.0.2"
+        "version": "1.0.3"
     },
     {
         "file": "plugins/default_engine.py",
